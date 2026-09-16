@@ -1,0 +1,605 @@
+from pathlib import Path
+import zipfile, textwrap
+
+base = Path("/mnt/data/relationship_support_site")
+base.mkdir(exist_ok=True)
+
+index_html = """<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A safe, respectful space for relationship conversations, encouragement and peer support." />
+  <title>HeartTalk | Relationship Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="navbar">
+    <a class="brand" href="#home">HeartTalk</a>
+    <nav>
+      <a href="#about">About</a>
+      <a href="#quotes">Quotes</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#contact">Talk to Me</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <span class="eyebrow">A calm space for relationship conversations</span>
+        <h1>You don't have to carry relationship stress alone.</h1>
+        <p>
+          HeartTalk is a private, respectful peer-support space where you can share what you're going through,
+          get encouragement, and talk things through without judgment.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="https://wa.me/254758658602?text=Hi%20HeartTalk%2C%20I%20would%20like%20to%20talk%20about%20my%20relationship." target="_blank" rel="noopener">
+            Chat on WhatsApp
+          </a>
+          <a class="btn secondary" href="#about">How it works</a>
+        </div>
+        <p class="privacy-note">Your story is yours. Share only what you feel comfortable sharing.</p>
+      </div>
+
+      <div class="hero-card">
+        <div class="heart">♡</div>
+        <p class="card-quote">“Sometimes you don't need someone to fix everything. You need someone to listen.”</p>
+        <div class="mini-points">
+          <span>Respectful</span>
+          <span>Private</span>
+          <span>No judgment</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="section-heading">
+        <span class="eyebrow">How HeartTalk works</span>
+        <h2>A conversation can bring clarity.</h2>
+        <p>
+          You can message me directly on WhatsApp about dating, communication problems, breakups, trust,
+          misunderstandings, boundaries, or simply when you need someone to listen.
+        </p>
+      </div>
+
+      <div class="cards three">
+        <article class="info-card">
+          <div class="icon">1</div>
+          <h3>Send a message</h3>
+          <p>Start with whatever is on your mind. You don't need to explain everything perfectly.</p>
+        </article>
+
+        <article class="info-card">
+          <div class="icon">2</div>
+          <h3>Talk it through</h3>
+          <p>We can look at the situation calmly and separate emotions, facts, expectations and choices.</p>
+        </article>
+
+        <article class="info-card">
+          <div class="icon">3</div>
+          <h3>Find your next step</h3>
+          <p>The goal is not to control your decision, but to help you think clearly and choose what feels healthy and respectful.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section soft" id="quotes">
+      <div class="section-heading">
+        <span class="eyebrow">Words to remember</span>
+        <h2>Relationship reminders</h2>
+      </div>
+
+      <div class="quote-grid">
+        <blockquote>“Good communication is not about winning. It is about understanding.”</blockquote>
+        <blockquote>“Respect should not disappear just because emotions are high.”</blockquote>
+        <blockquote>“Love can be real and still need boundaries.”</blockquote>
+        <blockquote>“If honesty is difficult, secrecy usually makes things harder.”</blockquote>
+        <blockquote>“You can care about someone and still choose peace.”</blockquote>
+        <blockquote>“A healthy relationship needs effort from both people.”</blockquote>
+      </div>
+    </section>
+
+    <section class="section" id="reviews">
+      <div class="section-heading">
+        <span class="eyebrow">Community feedback</span>
+        <h2>What people say</h2>
+        <p class="small">Replace these sample reviews with real feedback only after getting permission from the person.</p>
+      </div>
+
+      <div class="cards three">
+        <article class="review-card">
+          <div class="stars">★★★★★</div>
+          <p>“I felt heard and not judged. The conversation helped me calm down before making a big decision.”</p>
+          <strong>— Sample review</strong>
+        </article>
+
+        <article class="review-card">
+          <div class="stars">★★★★★</div>
+          <p>“The advice was simple and realistic. I was able to see the situation from another angle.”</p>
+          <strong>— Sample review</strong>
+        </article>
+
+        <article class="review-card">
+          <div class="stars">★★★★★</div>
+          <p>“It felt like talking to someone who actually listened instead of immediately choosing sides.”</p>
+          <strong>— Sample review</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <div>
+        <span class="eyebrow">Ready to talk?</span>
+        <h2>Message me privately on WhatsApp.</h2>
+        <p>
+          You can start with: “Hi, I need someone to talk to about my relationship.”
+        </p>
+        <a class="btn primary large" href="https://wa.me/254758658602?text=Hi%2C%20I%20need%20someone%20to%20talk%20to%20about%20my%20relationship." target="_blank" rel="noopener">
+          WhatsApp: 0758 658 602
+        </a>
+      </div>
+
+      <div class="disclaimer">
+        <h3>Important</h3>
+        <p>
+          HeartTalk offers peer support and general relationship guidance. It is not a replacement for professional
+          counseling, medical care, legal advice, or emergency services.
+        </p>
+        <p>
+          If someone is in immediate danger, contact a trusted adult or local emergency service instead of relying on this site.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <span id="year"></span> HeartTalk. Built with care.</p>
+    <a href="#home">Back to top ↑</a>
+  </footer>
+
+  <a class="floating-whatsapp" href="https://wa.me/254758658602?text=Hi%20HeartTalk%2C%20can%20we%20talk%3F" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+    WhatsApp
+  </a>
+
+  <script src="script.js"></script>
+</body>
+</html>
+"""
+
+style_css = """* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #fffafc;
+  --text: #241b20;
+  --muted: #6d6267;
+  --primary: #b83268;
+  --primary-dark: #8d244e;
+  --surface: #ffffff;
+  --soft: #fbeef3;
+  --border: #ead9e0;
+  --shadow: 0 18px 45px rgba(91, 41, 62, 0.09);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: "DM Sans", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.65;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 7%;
+  background: rgba(255, 250, 252, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(234, 217, 224, 0.8);
+}
+
+.brand {
+  font-family: "Playfair Display", serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.navbar nav {
+  display: flex;
+  gap: 24px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.navbar nav a:hover {
+  color: var(--primary);
+}
+
+.hero {
+  min-height: 84vh;
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  align-items: center;
+  gap: 60px;
+  padding: 80px 7%;
+  background:
+    radial-gradient(circle at 90% 15%, rgba(184, 50, 104, 0.12), transparent 28%),
+    radial-gradient(circle at 10% 90%, rgba(184, 50, 104, 0.08), transparent 25%);
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: var(--primary);
+  font-size: 0.83rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero h1,
+.section-heading h2,
+.contact h2 {
+  font-family: "Playfair Display", serif;
+  line-height: 1.12;
+}
+
+.hero h1 {
+  max-width: 780px;
+  font-size: clamp(2.7rem, 7vw, 5.7rem);
+  margin-bottom: 24px;
+}
+
+.hero-content > p {
+  max-width: 700px;
+  color: var(--muted);
+  font-size: 1.08rem;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin: 30px 0 16px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 14px 22px;
+  font-weight: 700;
+  transition: 0.25s ease;
+}
+
+.btn.primary {
+  background: var(--primary);
+  color: white;
+  box-shadow: 0 12px 24px rgba(184, 50, 104, 0.22);
+}
+
+.btn.primary:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn.secondary {
+  border: 1px solid var(--border);
+  background: white;
+}
+
+.btn.secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.btn.large {
+  margin-top: 16px;
+  padding: 16px 26px;
+}
+
+.privacy-note {
+  font-size: 0.9rem !important;
+}
+
+.hero-card {
+  background: var(--surface);
+  padding: 42px;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+}
+
+.heart {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--soft);
+  color: var(--primary);
+  font-size: 2rem;
+  margin-bottom: 22px;
+}
+
+.card-quote {
+  font-family: "Playfair Display", serif;
+  font-size: 1.65rem;
+  line-height: 1.4;
+}
+
+.mini-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 26px;
+}
+
+.mini-points span {
+  background: var(--soft);
+  color: var(--primary-dark);
+  padding: 7px 11px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.section {
+  padding: 90px 7%;
+}
+
+.section.soft {
+  background: var(--soft);
+}
+
+.section-heading {
+  max-width: 760px;
+  margin-bottom: 38px;
+}
+
+.section-heading h2,
+.contact h2 {
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  margin-bottom: 14px;
+}
+
+.section-heading p,
+.contact p {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 0.92rem;
+}
+
+.cards {
+  display: grid;
+  gap: 22px;
+}
+
+.cards.three {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.info-card,
+.review-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 28px;
+  box-shadow: var(--shadow);
+}
+
+.info-card .icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--soft);
+  color: var(--primary);
+  font-weight: 800;
+  margin-bottom: 18px;
+}
+
+.info-card h3 {
+  margin-bottom: 10px;
+}
+
+.info-card p,
+.review-card p {
+  color: var(--muted);
+}
+
+.quote-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+blockquote {
+  background: rgba(255,255,255,0.8);
+  border-left: 4px solid var(--primary);
+  border-radius: 14px;
+  padding: 24px;
+  font-family: "Playfair Display", serif;
+  font-size: 1.2rem;
+}
+
+.stars {
+  color: #b57b00;
+  letter-spacing: 3px;
+  margin-bottom: 14px;
+}
+
+.review-card strong {
+  display: block;
+  margin-top: 18px;
+  color: var(--primary-dark);
+}
+
+.contact {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.disclaimer {
+  padding: 28px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+}
+
+.disclaimer h3 {
+  margin-bottom: 10px;
+}
+
+.disclaimer p + p {
+  margin-top: 12px;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 28px 7%;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.floating-whatsapp {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 30;
+  background: #1f9d55;
+  color: #fff;
+  font-weight: 800;
+  border-radius: 999px;
+  padding: 13px 18px;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.14);
+}
+
+.floating-whatsapp:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 900px) {
+  .navbar nav {
+    display: none;
+  }
+
+  .hero,
+  .contact {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding-top: 58px;
+  }
+
+  .cards.three,
+  .quote-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .navbar,
+  .hero,
+  .section,
+  footer {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .hero {
+    min-height: auto;
+  }
+
+  .hero-card {
+    padding: 26px;
+  }
+
+  .hero-actions .btn,
+  .btn.large {
+    width: 100%;
+  }
+
+  footer {
+    flex-direction: column;
+  }
+
+  .floating-whatsapp {
+    right: 14px;
+    bottom: 14px;
+  }
+}
+"""
+
+script_js = """document.getElementById("year").textContent = new Date().getFullYear();
+"""
+
+readme = """# HeartTalk Relationship Support Website
+
+A simple mobile-friendly relationship peer-support website built with HTML, CSS and JavaScript.
+
+## Files
+- `index.html`
+- `style.css`
+- `script.js`
+
+## Publish with GitHub Pages
+1. Create a new GitHub repository.
+2. Upload all three files to the root of the repository.
+3. Open **Settings** → **Pages**.
+4. Under **Build and deployment**, select **Deploy from a branch**.
+5. Choose the `main` branch and `/root`, then save.
+6. GitHub will provide your public website link.
+
+## WhatsApp
+The current WhatsApp number in the website is:
+`+254 758 658 602`
+
+To change it later, replace every occurrence of:
+`254758658602`
+
+## Reviews
+The reviews included in the template are clearly marked as samples. Replace them with real reviews only with permission.
+"""
+
+(base/"index.html").write_text(index_html, encoding="utf-8")
+(base/"style.css").write_text(style_css, encoding="utf-8")
+(base/"script.js").write_text(script_js, encoding="utf-8")
+(base/"README.md").write_text(readme, encoding="utf-8")
+
+zip_path = Path("/mnt/data/HeartTalk_GitHub_Website.zip")
+with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
+    for p in base.iterdir():
+        z.write(p, arcname=p.name)
+
+str(zip_path)
